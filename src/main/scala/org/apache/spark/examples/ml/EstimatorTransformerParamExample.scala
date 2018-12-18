@@ -31,11 +31,14 @@ object EstimatorTransformerParamExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local[2]")
       .appName("EstimatorTransformerParamExample")
       .getOrCreate()
 
+
     // $example on$
     // Prepare training data from a list of (label, features) tuples.
+    //todo 定义dataframe
     val training = spark.createDataFrame(Seq(
       (1.0, Vectors.dense(0.0, 1.1, 0.1)),
       (0.0, Vectors.dense(2.0, 1.0, -1.0)),
@@ -44,6 +47,7 @@ object EstimatorTransformerParamExample {
     )).toDF("label", "features")
 
     // Create a LogisticRegression instance. This instance is an Estimator.
+    //todo 模型学习器
     val lr = new LogisticRegression()
     // Print out the parameters, documentation, and any default values.
     println(s"LogisticRegression parameters:\n ${lr.explainParams()}\n")
@@ -53,6 +57,7 @@ object EstimatorTransformerParamExample {
       .setRegParam(0.01)
 
     // Learn a LogisticRegression model. This uses the parameters stored in lr.
+    //todo fit方法传入一个dataframe 输出一个模型（转换器）
     val model1 = lr.fit(training)
     // Since model1 is a Model (i.e., a Transformer produced by an Estimator),
     // we can view the parameters it used during fit().
@@ -63,11 +68,11 @@ object EstimatorTransformerParamExample {
     // We may alternatively specify parameters using a ParamMap,
     // which supports several methods for specifying parameters.
     val paramMap = ParamMap(lr.maxIter -> 20)
-      .put(lr.maxIter, 30)  // Specify 1 Param. This overwrites the original maxIter.
-      .put(lr.regParam -> 0.1, lr.threshold -> 0.55)  // Specify multiple Params.
+      .put(lr.maxIter, 30) // Specify 1 Param. This overwrites the original maxIter.
+      .put(lr.regParam -> 0.1, lr.threshold -> 0.55) // Specify multiple Params.
 
     // One can also combine ParamMaps.
-    val paramMap2 = ParamMap(lr.probabilityCol -> "myProbability")  // Change output column name.
+    val paramMap2 = ParamMap(lr.probabilityCol -> "myProbability") // Change output column name.
     val paramMapCombined = paramMap ++ paramMap2
 
     // Now learn a new model using the paramMapCombined parameters.
@@ -97,4 +102,5 @@ object EstimatorTransformerParamExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println
