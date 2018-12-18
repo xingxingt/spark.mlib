@@ -25,17 +25,18 @@ import org.apache.spark.ml.stat.ChiSquareTest
 import org.apache.spark.sql.SparkSession
 
 /**
- * An example for Chi-square hypothesis testing.
- * Run with
- * {{{ 检查每一列和特征的相关性
- * bin/run-example ml.ChiSquareTestExample
- * }}}
- */
+  * An example for Chi-square hypothesis testing.
+  * Run with
+  * {{{ 检查每一列和特征的相关性
+  * bin/run-example ml.ChiSquareTestExample
+  * }}}
+  */
 object ChiSquareTestExample {
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local[2]")
       .appName("ChiSquareTestExample").master("local")
       .getOrCreate()
     import spark.implicits._
@@ -60,4 +61,5 @@ object ChiSquareTestExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println

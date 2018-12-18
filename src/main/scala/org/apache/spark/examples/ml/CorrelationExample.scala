@@ -52,6 +52,9 @@ object CorrelationExample {
     )
 
     val df = data.map(Tuple1.apply).toDF("features")
+    println("features dataframe:")
+    df.show()
+
     val Row(coeff1: Matrix) = Correlation.corr(df, "features").head
     println(s"Pearson correlation matrix:\n $coeff1")
     //todo coeff1结果:每一行都有四个数，代表当前第几个向量与Seq中的4个向量的相关性
