@@ -38,6 +38,7 @@ object PipelineExample {
 
     // $example on$
     // Prepare training documents from a list of (id, text, label) tuples.
+    //todo 创建dataframe
     val training = spark.createDataFrame(Seq(
       (0L, "a b c d e spark", 1.0),
       (1L, "b d ourui", 0.0),
@@ -46,29 +47,37 @@ object PipelineExample {
     )).toDF("id", "text", "label")
 
     // Configure an ML pipeline, which consists of three stages: tokenizer, hashingTF, and lr.
+    //todo 分词器->转化器
     val tokenizer = new Tokenizer()
       .setInputCol("text")
       .setOutputCol("words")
+    //todo  词频->转换器
     val hashingTF = new HashingTF()
       .setNumFeatures(1000)
       .setInputCol(tokenizer.getOutputCol)
       .setOutputCol("features")
+    //todo 创建模型学习器
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.001)
+    //todo 创建管道
     val pipeline = new Pipeline()
       .setStages(Array(tokenizer, hashingTF, lr))
 
     // Fit the pipeline to training documents.
+    //todo 生成pipeline model
     val model = pipeline.fit(training)
 
     // Now we can optionally save the fitted pipeline to disk
+    //todo  可以将pipeline model保存在磁盘中
     model.write.overwrite().save("./tmp/spark-logistic-regression-model")
 
     // We can also save this unfit pipeline to disk
+    //todo 可以将pipeline保存在磁盘中
     pipeline.write.overwrite().save("./tmp/unfit-lr-model")
 
     // And load it back in during production
+    //todo  加载保存在磁盘中的pipeline model
     val sameModel = PipelineModel.load("./tmp/spark-logistic-regression-model")
 
     // Prepare test documents, which are unlabeled (id, text) tuples.
