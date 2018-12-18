@@ -29,6 +29,7 @@ object Word2VecExample {
   def main(args: Array[String]) {
     val spark = SparkSession
       .builder
+      .master("local[2]")
       .appName("Word2Vec example")
       .getOrCreate()
 
@@ -40,6 +41,8 @@ object Word2VecExample {
       "Logistic regression models are neat".split(" ")
     ).map(Tuple1.apply)).toDF("text")
 
+    documentDF.show()
+
     // Learn a mapping from words to Vectors.
     val word2Vec = new Word2Vec()
       .setInputCol("text")
@@ -50,10 +53,12 @@ object Word2VecExample {
 
     val result = model.transform(documentDF)
     result.collect().foreach { case Row(text: Seq[_], features: Vector) =>
-      println(s"Text: [${text.mkString(", ")}] => \nVector: $features\n") }
+      println(s"Text: [${text.mkString(", ")}] => \nVector: $features\n")
+    }
     // $example off$
 
     spark.stop()
   }
 }
+
 // scalastyle:on println
