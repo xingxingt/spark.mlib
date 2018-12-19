@@ -39,9 +39,9 @@ object Word2VecExample {
       "Hi I heard about Spark".split(" "),
       "I wish Java could use case classes".split(" "),
       "Logistic regression models are neat".split(" ")
-    ).map(Tuple1.apply)).toDF("text")
+    ).map(Tuple1.apply)).toDF("text") //Tuple1的构造需要apply,表示数据值本身
 
-    documentDF.show()
+    documentDF.show(false)
 
     // Learn a mapping from words to Vectors.
     val word2Vec = new Word2Vec()

@@ -27,6 +27,7 @@ object RFormulaExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local")
       .appName("RFormulaExample")
       .getOrCreate()
 
@@ -49,4 +50,5 @@ object RFormulaExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println

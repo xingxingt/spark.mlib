@@ -27,6 +27,7 @@ object StringIndexerExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local")
       .appName("StringIndexerExample")
       .getOrCreate()
 
@@ -46,4 +47,5 @@ object StringIndexerExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println

@@ -29,7 +29,7 @@ object PCAExample {
     val spark = SparkSession
       .builder
       .appName("PCAExample")
-        .master("local")
+      .master("local")
       .getOrCreate()
 
     // $example on$
@@ -46,12 +46,12 @@ object PCAExample {
       .setK(1)
       .fit(df)
 
-    val result = pca.transform(df)//.select("pcaFeatures")
+    val result = pca.transform(df) //.select("pcaFeatures")
 
     /**
       * https://www.jianshu.com/p/8642d5ea5389
       */
-    println("explainedVariance:"+pca.explainedVariance)
+    println("explainedVariance:" + pca.explainedVariance)
 
     result.show(false)
     // $example off$
@@ -59,4 +59,5 @@ object PCAExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println

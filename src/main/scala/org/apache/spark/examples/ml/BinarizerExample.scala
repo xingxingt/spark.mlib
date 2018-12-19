@@ -27,6 +27,7 @@ object BinarizerExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local")
       .appName("BinarizerExample")
       .getOrCreate()
 
@@ -48,4 +49,5 @@ object BinarizerExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println

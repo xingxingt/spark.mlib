@@ -20,6 +20,7 @@ package org.apache.spark.examples.ml
 
 // $example on$
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
+import org.apache.spark.sql.SaveMode
 // $example off$
 import org.apache.spark.sql.SparkSession
 
@@ -29,7 +30,7 @@ object TfIdfExample {
     val spark = SparkSession
       .builder
       .appName("TfIdfExample")
-        .master("local")
+      .master("local")
       .getOrCreate()
 
     // $example on$
@@ -39,23 +40,33 @@ object TfIdfExample {
       (1.0, "Logistic regression models are neat")
     )).toDF("label", "sentence")
 
+    //todo 实例出分词器
     val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
+    //todo 将sentence列转换为向量 并以words作为一个新列添加在新的Dataframe中
     val wordsData = tokenizer.transform(sentenceData)
+    wordsData.show(false)
 
+    //todo 生成词频TF向量
     val hashingTF = new HashingTF()
       .setInputCol("words").setOutputCol("rawFeatures").setNumFeatures(20)
 
+    //todo HashingTF通过hash函数生成特征向量
     val featurizedData = hashingTF.transform(wordsData)
     // alternatively, CountVectorizer can also be used to get term frequency vectors
+    featurizedData.show(false)
 
+    //todo  生成IDFModel的评估器
     val idf = new IDF().setInputCol("rawFeatures").setOutputCol("features")
     val idfModel = idf.fit(featurizedData)
 
     val rescaledData = idfModel.transform(featurizedData)
-    rescaledData.select("label", "features").show()
+    rescaledData.select("label", "features").show(false)
+    //    featurizedData.write.format("json").mode(SaveMode.Overwrite).save("file:///Users/axing/Downloads/spark_ml")
+
     // $example off$
 
     spark.stop()
   }
 }
+
 // scalastyle:on println

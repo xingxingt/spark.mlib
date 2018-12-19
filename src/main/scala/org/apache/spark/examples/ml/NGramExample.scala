@@ -27,6 +27,7 @@ object NGramExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local")
       .appName("NGramExample")
       .getOrCreate()
 
@@ -46,4 +47,5 @@ object NGramExample {
     spark.stop()
   }
 }
+
 // scalastyle:on println
