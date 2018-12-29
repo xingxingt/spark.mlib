@@ -217,5 +217,6 @@
     <orderEntry type="library" name="Maven: com.chuusai:shapeless_2.11:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.typelevel:macro-compat_2.11:1.1.1" level="project" />
     <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
+    <orderEntry type="library" name="scala-sdk-2.12.8" level="application" />
   </component>
 </module>
